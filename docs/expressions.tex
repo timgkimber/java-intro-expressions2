@@ -1,0 +1,299 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{java-specs}
+
+\DeclareMathOperator*{\binop}{\#}
+
+\module{536: Introduction to Java}
+\classes{MSc in Computing Science}
+\title{Tutorial 1 --- Expressions}
+\date{}
+
+
+\begin{document}
+ 
+\maketitle
+
+
+In this exercise you will continue to implement Java types representing
+simple arithmetic expressions.
+You can either use the code you have written yourself so far,
+or start from the code provided.
+
+\section{Aims}
+
+This tutorial will help you understand how to: 
+
+\begin{itemize}
+  \item Write simple Java classes
+  \item Implement inheritance in Java
+  \item Use abstract classes in Java
+  \item Make use of types from the Java API
+\end{itemize}
+
+ 
+\section{Your Development Environment}
+ 
+Something you might want to think about at this point is the sort of
+development environment you want to use.
+In the lecture I have been using command line tools and if you like things
+like vim and make, then feel free to stick to that.
+For Java programming, however,
+an \emph{integrated development environment} (IDE) is a very popular 
+alternative.
+An IDE is a sophisticated graphical tool that is designed to help:
+
+\begin{itemize}
+  \item Organise your code, including via version control
+  \item Compile and run your code
+  \item Debug and correct your code
+  \item Refactor your code
+  \item Build and test your application
+\end{itemize}
+
+Two of the most popular IDEs, IntelliJ and Eclipse, are both available on the 
+lab machines (under Programming on the Applications menu).
+For what it's worth, I always use the Eclipse IDE, certainly for bigger projects.
+Although, I am told that the most recent versions of IntelliJ are thought to be
+better.
+My feeling is that doing everything on the command line requires a lot of
+manual set up that I prefer to avoid.
+This is very much a personal view though --- others will disagree.
+If you want to try using an IDE then have a go.
+Look for a tutorial online.
+There will be an initial learning period,
+but once you get the hang of it you will speed up no end.
+
+\section{Obtain Provided Files}
+
+Download the provided code for this tutorial from CATE into a suitable
+directory and unzip the file.
+
+\section {What To Do}
+
+\subsection{Implement Remaining Expressions}
+
+Your first task is to implement two other types of expression: a sum (addition)
+and a product (multiplication).
+These should be implemented as the classes \java{Sum} and \java{Product}
+as follows:
+
+\begin{itemize}
+  \item Both classes should be in the same package as \java{WholeNumber}
+  \item Both classes should have a constructor that accepts two 
+    \java{Expressions}.
+    In each case, the first argument is the left operand and the second
+    is the right operand.
+  \item Both classes should implement the \java{Expression} interface.
+  \item Both classes should override the \java{toString()} method of the 
+  superclass \java{Object}.
+\end{itemize}
+
+
+\subsection{Refactor Expression Types}
+
+The two classes you have just written share various properties:
+
+\begin{itemize}
+  \item They have the same member variables
+  \item Their constructors are identical
+\end{itemize}
+
+So, you can extract this part of the classes, 
+the part that defines their state, into a common parent class 
+\java{BinaryExpression}.
+\java{BinaryExpression} should declare that it implements \java{Expression},
+so that all \java{BinaryExpression}s are automatically \java{Expressions}.
+This might seem a bad choice, because you cannot define 
+a single way to evaluate all binary expressions.
+To find out how to solve this problem, and how to implement subclasses in Java
+you will need to go to the Java Tutorial and doing a bit of reading.
+
+The main section you need is on inheritance, under 
+``Interfaces and Inheritance'':
+
+https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html
+
+There are several subsections under that page (see the navigation on the left).
+The important ones to look at now are ``Using the Keyword super'',
+so you can see how to call the constructor of a superclass from a subclass,
+and ``Abstract Methods And Classes''.
+Make sure you read the very last section about abstract classes, 
+when an abstract class implements an interface.
+Finally, you will need to think about the visibility of the fields
+of \java{BinaryExpression}.
+This is covered in the section on ``Controlling Access to Members of a Class'':
+
+https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html
+
+You should limit the visibility of the fields as much as possible
+while still allowing the access you need.
+
+
+\subsection{Sorting Expressions}
+
+You have seen how to define and implement your own interface type in Java.
+The Java API also contains ``off the shelf'' interfaces that your classes
+can implement. 
+Doing this bestows on the class some useful ability.
+One such interface is \java{java.lang.Comparable}.
+You can read its documentation at:
+
+https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable
+
+In a nutshell, objects of any class implementing \java{Comparable}  
+can be sorted using \java{Arrays.sort(...)} and other similar methods.
+
+Your next task is to implement \java{Comparable} for all \java{Expression}
+types, so that they are sortable.
+Firstly, make \java{Expression} a subtype of \java{Comparable}.
+Interfaces can inherit from one another like classes,
+using the same notation.
+So, change the declaration of \java{Expression} to be:
+
+\begin{itemize}
+  \item \java{public interface Expression 
+    extends Comparable<Expression> \{ ... \}}
+\end{itemize}
+
+The \java{<Expression>} is necessary because \java{Comparable} is
+\emph{generic}.
+Don't worry about this now.
+You will learn more about Java generics later in the course.
+For now you need to decide how you are going to implement
+\java{Comparable<Expression>}.
+The interface has a single method: 
+
+\begin{itemize}
+  \item \java{public int compareTo(Expression other)}
+\end{itemize}
+
+which must be defined for all \java{Expression}s.
+Decide in which class or classes this method should be defined.
+A call \java{this.compareTo(that)} returns:
+
+\begin{itemize}
+  \item a positive int if \java{this} is ``greater than'' \java{that}
+  \item a negative int if \java{this} is ``less than'' \java{that}
+  \item zero if \java{this} is ``equal to'' \java{that}
+\end{itemize}
+
+You should use the value of the expression (the integer value obtained by
+evaluating the expression) to determine the order.
+Test your implementation by running \java{ExpressionProg}.
+
+\section{And Finally}
+
+If you have completed the tutorial before the end of the session then
+use the time to make some notes on Java.
+You will almost certainly think of questions that have not been answered 
+by the course.
+In this case, try to work out the answers for yourself by experimenting
+with the programs from the lectures or devising your own examples.
+If you get stuck the Java Tutorial is a very good resource. 
+
+
+
+
+
+
+
+
+% \subsection*{OO Implementation}
+% 
+% Expressions can be implemented using the following class hierarchy.
+% 
+% \begin{figure}[tbh]
+%   \includegraphics[scale=0.6]{images/uml}
+%   \caption{The \java{Expression} classes.}
+% \end{figure}
+% 
+% 
+% \begin{itemize}
+%   \item An \java{Expression} is an object with a value and a precedence.
+%         The class \java{Expression} will not possess enough information to be
+%         instantiated directly. 
+%         It will be an abstract super class. 
+%   \item A \java{NumberExpression} is a kind of \java{Expression} that 
+%         encapsulates an integer value.
+%   \item An \java{LBinaryExpression} is a kind of \java{Expression} 
+%         that represents a left-associative binary operation between 
+%         two sub-expressions. 
+%         It has a left operand, an operator symbol, and a right operand.
+%         An operation $\binop$ is left-associative if $E_1 \binop E_2 \binop E_3$
+%         means $(E_1 \binop E_2) \binop E_3$.
+%   \item \java{Addition} and \java{Multiplication} are two kinds of 
+%         \java{LBinaryExpression}.
+%         The symbol of an \java{Addition} is `` + '', 
+%         and the symbol of a \java{Multiplication} is `` * ''.
+%   \item All \java{Expression}s can be evaluated. 
+%         The evaluation result is the same as that of the arithmetic expression
+%         it represents.
+%   \item All \java{Expression}s can be turned to a string. 
+%         This string is the text representation of the expression, 
+%         using minimum brackets.
+%         Brackets are required only when the precedence of some operand 
+%         expression is \java{lower} than the precedence of the binary 
+%         expression of which it is a part.
+%         See the implementation of this feature in the C++ code below.
+%         
+% \end{itemize}
+% 
+%  
+% \section*{What To Do}
+% 
+% You have been given the code for \java{Expression.java}.
+% Write Java implementations of the other four classes described above.
+% A C++ implementation is shown below, for reference.
+% 
+% \begin{itemize}
+%   \item Save \java{Expression.java} in a suitable directory and add more
+%         source files in the same place.
+%         Remember each Java class \java{NameOfClass} should have its own
+%         file.
+%         This file must be named \java{NameOfClass.java} or your code will not 
+%         compile.
+%   \item Start by implementing \java{NumberExpression}.
+%         This is a non-abstract class that should subclass \java{Expression}.
+%   \item Note that, in the Java implementation,
+%         all printed output is generated by the 
+%         (non-abstract, static) \java{Expression.printExpression} method.
+%         This (implicitly) calls the expression's \java{toString()} method
+%         to obtain its string representation.
+%         The \java{toString()} method is inherited from \java{Object} and should
+%         be overridden in the different expression classes.
+%   \item \java{Expression} has been given a \java{main} method that creates
+%         three \java{NumberExpression}s and prints them out.
+%         Look at \java{main} to see how \java{NumberExpression}s are constructed.
+%         Once your \java{NumberExpression} is complete, you should be able to
+%         compile both files with
+% %
+%         \begin{verbatim}
+%   javac Expression.java
+%         \end{verbatim}
+%         and then run \java{Expression.main} with
+%         \begin{verbatim}
+%   java Expression
+%         \end{verbatim}
+% %        
+%   \item Now implement the binary expression classes.
+%         Uncomment the rest of \java{Expression.main} to test as you go.
+%         
+%         
+% \end{itemize}
+% 
+% \section*{C++ Code}
+% 
+% %\begin{center}
+% \raggedright
+% \includegraphics[scale=0.9]{images/expcpp}
+% \includegraphics[scale=0.9]{images/numcpp}
+% \includegraphics[scale=0.9]{images/bincpp}
+% \includegraphics[scale=0.9]{images/addcpp}
+% \includegraphics[scale=0.9]{images/mulcpp}
+%    
+%\end{center}
+
+\end{document}
+
+
+
