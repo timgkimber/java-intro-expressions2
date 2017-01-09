@@ -19,4 +19,12 @@ public class WholeNumber extends AbstractExpression {
     return this.value;
   }
 
+  public boolean equals(Object obj) {
+    if (obj == null)                    { return false; }
+    if (! (obj instanceof WholeNumber)) { return false; }
+
+    WholeNumber that = (WholeNumber) obj;
+    return this.evaluate() == that.evaluate();
+  }
+
 }

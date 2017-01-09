@@ -40,9 +40,6 @@ public class ExpressionProg {
     System.out.printf(
       "The numbers are %s\n", java.util.Arrays.toString(nums));
 
-
-
-
     Arrays.sort(nums);
     System.out.printf(
       "After sorting, the numbers are %s\n",
